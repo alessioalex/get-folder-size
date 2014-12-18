@@ -11,7 +11,7 @@ function readSizeRecursive(item, ignoreRegExp, cb) {
   }
 
   fs.lstat(item, function(err, stats) {
-    var total = stats.size || 0;
+    var total = !err ? (stats.size || 0) : 0;
 
     if (!err && stats.isDirectory()) {
       fs.readdir(item, function(err, list) {
