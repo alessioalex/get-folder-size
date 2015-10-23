@@ -1,33 +1,43 @@
-"use strict";
+'use strict';
 
 var fs = require('fs');
 var path = require('path');
 var async = require('async');
 
-function readSizeRecursive(item, ignoreRegExp, cb) {
-  if (!cb) {
-    cb = ignoreRegExp;
+function readSizeRecursive(item, ignoreRegEx, callback) {
+  var cb;
+  var ignoreRegExp;
+
+  if (!callback) {
+    cb = ignoreRegEx;
     ignoreRegExp = null;
+  } else {
+    cb = callback;
+    ignoreRegExp = ignoreRegEx;
   }
 
-  fs.lstat(item, function(err, stats) {
-    var total = !err ? (stats.size || 0) : 0;
+  fs.lstat(item, function lstat(e, stats) {
+    var total = !e ? (stats.size || 0) : 0;
 
-    if (!err && stats.isDirectory()) {
-      fs.readdir(item, function(err, list) {
+    if (!e && stats.isDirectory()) {
+      fs.readdir(item, function readdir(err, list) {
         if (err) { return cb(err); }
 
         async.forEach(
           list,
-          function(dirItem, callback) {
-            readSizeRecursive(path.join(item, dirItem), ignoreRegExp, function(err, size) {
-              if (!err) { total += size; }
+          function iterate(dirItem, next) {
+            readSizeRecursive(
+              path.join(item, dirItem),
+              ignoreRegExp,
+              function readSize(error, size) {
+                if (!error) { total += size; }
 
-              callback(err);
-            });
+                next(error);
+              }
+            );
           },
-          function(err) {
-            cb(err, total);
+          function done(finalErr) {
+            cb(finalErr, total);
           }
         );
       });
@@ -36,7 +46,7 @@ function readSizeRecursive(item, ignoreRegExp, cb) {
         total = 0;
       }
 
-      cb(err, total);
+      cb(e, total);
     }
   });
 }

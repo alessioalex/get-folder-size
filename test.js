@@ -1,8 +1,9 @@
-"use strict";
+/* eslint-disable func-names */
+'use strict';
 
 var proxyquire = require('proxyquire');
 var path = require('path');
-var should = require('should');
+require('should');
 
 var files = [
   '/root',
@@ -49,8 +50,8 @@ var fs = {
         return ((file !== item) && (file.indexOf(item) !== -1));
       }).map(function(file) {
         return file.replace(item, '');
-      }).filter(function(item) {
-        return (item.lastIndexOf(path.sep) <= 0);
+      }).filter(function(it) {
+        return (it.lastIndexOf(path.sep) <= 0);
       });
 
       cb(null, list);

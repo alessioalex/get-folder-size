@@ -3,26 +3,32 @@
   "version": "0.1.1",
   "description": "Get the size of a folder by recursively iterating through all its sub(files && folders).",
   "main": "index.js",
-  "bin": { "get-folder-size": "bin/get-folder-size" },
+  "bin": {
+    "get-folder-size": "bin/get-folder-size"
+  },
   "dependencies": {
-    "async": "~0.9.0",
-    "minimist": "~0.1.0"
+    "async": "^1.4.2",
+    "minimist": "^1.2.0"
   },
   "devDependencies": {
-    "mocha": "~1.19.0",
-    "proxyquire": "~1.0.0",
-    "should": "~3.3.2"
+    "alessioalex-standard": "^1.0.0",
+    "husky": "^0.10.1",
+    "mocha": "^2.3.3",
+    "proxyquire": "^1.7.3",
+    "should": "^7.1.1"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "lint": "alessioalex-standard",
+    "precommit": "npm run lint && npm test"
   },
   "keywords": [
     "folder",
     "size"
   ],
-  "repository" : {
-    "type" : "git",
-    "url"  : "https://github.com/alessioalex/get-folder-size.git"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alessioalex/get-folder-size.git"
   },
   "author": "Alexandru Vladutu <alexandru.vladutu@gmail.com>",
   "license": "MIT"

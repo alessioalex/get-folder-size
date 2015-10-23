@@ -1,4 +1,5 @@
-"use strict";
+/* eslint-disable func-names, no-console */
+'use strict';
 
 var path = require('path');
 var getSize = require('./');
