@@ -17,7 +17,7 @@ getSize(myFolder, function(err, size) {
   if (err) { throw err; }
 
   console.log(size + ' bytes');
-  console.log((size / 1024 / 1024).toFixed(2) + ' Mb');
+  console.log((size / 1024 / 1024).toFixed(2) + ' MB');
 });
 ```
 
