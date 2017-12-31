@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 var getSize = require('../');
-var argv = require('minimist')(process.argv.slice(2));
+var argv = require('gar')(process.argv.slice(2));
 var path = require('path');
 // --folder or -f or last argument passed
 var folder = argv.folder || argv.f || argv._[argv._.length - 1];
