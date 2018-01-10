@@ -1,6 +1,6 @@
 {
   "name": "get-folder-size",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Get the size of a folder by recursively iterating through all its sub(files && folders).",
   "main": "index.js",
   "bin": {
