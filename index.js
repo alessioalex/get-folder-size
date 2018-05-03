@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const eachAsync = require('tiny-each-async');
 
-function readSizeRecursive(item, ignoreRegEx, callback) {
+function readSizeRecursive(seen, item, ignoreRegEx, callback) {
   let cb;
   let ignoreRegExp;
 
@@ -19,6 +19,12 @@ function readSizeRecursive(item, ignoreRegEx, callback) {
   fs.lstat(item, function lstat(e, stats) {
     let total = !e ? (stats.size || 0) : 0;
 
+    if (stats) {
+      if (seen.has(stats.ino)) { return cb(null, 0); }
+
+      seen.add(stats.ino);
+    }
+
     if (!e && stats.isDirectory()) {
       fs.readdir(item, (err, list) => {
         if (err) { return cb(err); }
@@ -27,6 +33,7 @@ function readSizeRecursive(item, ignoreRegEx, callback) {
           list,
           (dirItem, next) => {
             readSizeRecursive(
+              seen,
               path.join(item, dirItem),
               ignoreRegExp,
               (error, size) => {
@@ -51,4 +58,8 @@ function readSizeRecursive(item, ignoreRegEx, callback) {
   });
 }
 
-module.exports = readSizeRecursive;
+module.exports = (...args) => {
+  args.unshift(new Set());
+
+  return readSizeRecursive(...args);
+};
