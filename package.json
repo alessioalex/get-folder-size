@@ -7,11 +7,10 @@
     "get-folder-size": "bin/get-folder-size"
   },
   "dependencies": {
-    "async": "^1.4.2",
-    "gar": "^1.0.2"
+    "gar": "^1.0.2",
+    "tiny-each-async": "2.0.3"
   },
   "devDependencies": {
-    "alessioalex-standard": "^1.0.0",
     "husky": "^0.10.1",
     "mocha": "^2.3.3",
     "proxyquire": "^1.7.3",
@@ -19,8 +18,7 @@
   },
   "scripts": {
     "test": "mocha",
-    "lint": "alessioalex-standard",
-    "precommit": "npm run lint && npm test"
+    "precommit": "npm test"
   },
   "keywords": [
     "folder",

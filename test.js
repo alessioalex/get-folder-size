@@ -1,11 +1,10 @@
-/* eslint-disable func-names */
 'use strict';
 
-var proxyquire = require('proxyquire');
-var path = require('path');
+const proxyquire = require('proxyquire');
+const path = require('path');
 require('should');
 
-var files = [
+let files = [
   '/root',
   '/root/folder',
   '/root/folder/subfolder',
@@ -15,42 +14,39 @@ var files = [
   '/root/file2'
 ];
 
-var sizes = {
+const sizes = {
   '/root/folder/subfolder/file4': 4,
   '/root/folder/file3': 3,
   '/root/file1': 1,
   '/root/file2': 2
 };
 
-Object.keys(sizes).forEach(function(file) {
-  var file2 = file.replace(/\//g, path.sep);
+Object.keys(sizes).forEach(file => {
+  const file2 = file.replace(/\//g, path.sep);
+
   sizes[file2] = sizes[file];
 });
 
-files.map(function(file) {
-  return file.replace(/\//g, path.sep);
-});
+files = files.map(file => file.replace(/\//g, path.sep));
 
-var fs = {
-  lstat: function(item, cb) {
-    var stats = {
+const fs = {
+  lstat: (item, cb) => {
+    const stats = {
       size: sizes[item],
-      isDirectory: function() {
+      isDirectory: () => {
         return ((item === files[0]) || /folder$/.test(item));
       }
     };
 
-    setImmediate(function() {
-      cb(null, stats);
-    });
+    setImmediate(() => cb(null, stats));
   },
-  readdir: function(item, cb) {
-    setImmediate(function() {
-      var list = files.filter(function(file) {
+  readdir: (item, cb) => {
+    setImmediate(() => {
+      const list = files.filter(file => {
         return ((file !== item) && (file.indexOf(item) !== -1));
-      }).map(function(file) {
+      }).map(file => {
         return file.replace(item, '');
-      }).filter(function(it) {
+      }).filter(it => {
         return (it.lastIndexOf(path.sep) <= 0);
       });
 
@@ -59,25 +55,25 @@ var fs = {
   }
 };
 
-describe('getSize', function() {
-  var getSize;
+describe('getSize', () => {
+  let getSize;
 
-  before(function() {
+  before(() => {
     getSize = proxyquire.load('./index', {
       fs: fs
     });
   });
 
-  it('should get the size of the folder', function(done) {
-    getSize(files[0], function(err, total) {
+  it('should get the size of the folder', (done) => {
+    getSize(files[0], (err, total) => {
       total.should.eql(10);
 
       done();
     });
   });
 
-  it('should ignore files', function(done) {
-    getSize(files[0], /(file1|file2)/, function(err, total) {
+  it('should ignore files', (done) => {
+    getSize(files[0], /(file1|file2)/, (err, total) => {
       total.should.eql(7);
 
       done();

@@ -1,14 +1,13 @@
-/* eslint-disable func-names, no-console */
 'use strict';
 
-var path = require('path');
-var getSize = require('./');
+const path = require('path');
+const getSize = require('./');
 
 if (!process.env.FOLDER) {
   throw new Error('FOLDER env var needed');
 }
 
-getSize(path.resolve(process.env.FOLDER), function(err, size) {
+getSize(path.resolve(process.env.FOLDER), (err, size) => {
   if (err) { throw err; }
 
   console.log(size + ' bytes');

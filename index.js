@@ -1,12 +1,12 @@
 'use strict';
 
-var fs = require('fs');
-var path = require('path');
-var async = require('async');
+const fs = require('fs');
+const path = require('path');
+const eachAsync = require('tiny-each-async');
 
 function readSizeRecursive(item, ignoreRegEx, callback) {
-  var cb;
-  var ignoreRegExp;
+  let cb;
+  let ignoreRegExp;
 
   if (!callback) {
     cb = ignoreRegEx;
@@ -17,26 +17,26 @@ function readSizeRecursive(item, ignoreRegEx, callback) {
   }
 
   fs.lstat(item, function lstat(e, stats) {
-    var total = !e ? (stats.size || 0) : 0;
+    let total = !e ? (stats.size || 0) : 0;
 
     if (!e && stats.isDirectory()) {
-      fs.readdir(item, function readdir(err, list) {
+      fs.readdir(item, (err, list) => {
         if (err) { return cb(err); }
 
-        async.forEach(
+        eachAsync(
           list,
-          function iterate(dirItem, next) {
+          (dirItem, next) => {
             readSizeRecursive(
               path.join(item, dirItem),
               ignoreRegExp,
-              function readSize(error, size) {
+              (error, size) => {
                 if (!error) { total += size; }
 
                 next(error);
               }
             );
           },
-          function done(finalErr) {
+          (finalErr) => {
             cb(finalErr, total);
           }
         );

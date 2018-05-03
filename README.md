@@ -11,9 +11,9 @@ getFolderSize(folder, [regexIgnorePattern], callback)
 Example:
 
 ```js
-var getSize = require('get-folder-size');
+const getSize = require('get-folder-size');
 
-getSize(myFolder, function(err, size) {
+getSize(myFolder, (err, size) => {
   if (err) { throw err; }
 
   console.log(size + ' bytes');
