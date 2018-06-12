@@ -30,7 +30,7 @@ get-folder-size --folder=/my/folder --ignore=node_modules
 
 ## Size vs Size on disk
 
-[This module calculates the actual file size, and not the size on disk.](http://stackoverflow.com/questions/15470787/please-help-me-understand-size-vs-size-on-disk)
+[This module calculates the actual file size, and not the size on disk.](https://web.archive.org/web/20140712235443/https://stackoverflow.com/questions/15470787/please-help-me-understand-size-vs-size-on-disk)
 
 ## License
 
