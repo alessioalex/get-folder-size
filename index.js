@@ -31,6 +31,7 @@ function readSizeRecursive(seen, item, ignoreRegEx, callback) {
 
         eachAsync(
           list,
+          5000,
           (dirItem, next) => {
             readSizeRecursive(
               seen,
