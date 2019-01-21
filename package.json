@@ -7,12 +7,12 @@
     "get-folder-size": "bin/get-folder-size"
   },
   "dependencies": {
-    "gar": "^1.0.2",
+    "gar": "^1.0.4",
     "tiny-each-async": "2.0.3"
   },
   "devDependencies": {
     "husky": "^0.10.1",
-    "mocha": "^2.3.3",
+    "mocha": "^5.2.0",
     "proxyquire": "^1.7.3",
     "should": "^7.1.1"
   },
