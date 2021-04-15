@@ -1,15 +1,14 @@
-'use strict';
 
-const path = require('path');
-const getSize = require('./');
+import path from 'path';
+import getFolderSize from './index.js';
 
 if (!process.env.FOLDER) {
   throw new Error('FOLDER env var needed');
 }
 
-getSize(path.resolve(process.env.FOLDER), (err, size) => {
-  if (err) { throw err; }
+getFolderSize.strict(path.resolve(process.env.FOLDER)).then(size => {
 
   console.log(size + ' bytes');
-  console.log((size / 1024 / 1024).toFixed(2) + ' Mb');
+  console.log((size / 1000 / 1000).toFixed(2) + ' MB');
+
 });

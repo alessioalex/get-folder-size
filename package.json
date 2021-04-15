@@ -1,27 +1,32 @@
 {
   "name": "get-folder-size",
   "version": "2.0.1",
-  "description": "Get the size of a folder by recursively iterating through all its sub(files && folders).",
+  "description": "Get the size of a folder by iterating through its sub-files and -folders.",
+  "type": "module",
   "main": "index.js",
   "bin": {
-    "get-folder-size": "bin/get-folder-size"
+    "get-folder-size": "bin/get-folder-size.js"
+  },
+  "files": [
+    "index.js",
+    "bin/get-folder-size.js"
+  ],
+  "engines": {
+    "node": ">=14.13.0"
   },
   "dependencies": {
-    "gar": "^1.0.4",
-    "tiny-each-async": "2.0.3"
+    "gar": "^1.0.4"
   },
   "devDependencies": {
-    "husky": "^0.10.1",
-    "mocha": "^5.2.0",
-    "proxyquire": "^1.7.3",
-    "should": "^7.1.1"
+    "memfs": "^3.2.2",
+    "tap": "^15.0.2"
   },
   "scripts": {
-    "test": "mocha",
-    "precommit": "npm test"
+    "test": "tap --no-coverage"
   },
   "keywords": [
     "folder",
+    "directory",
     "size"
   ],
   "repository": {
