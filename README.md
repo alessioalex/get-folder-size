@@ -113,6 +113,21 @@ for(const path of [
 
 This module calculates the actual folder size, and not the size on disk. [Read about the difference here.](https://web.archive.org/web/20140712235443/https://stackoverflow.com/questions/15470787/please-help-me-understand-size-vs-size-on-disk)
 
+### How do I import it from a CommonJS module?
+
+CommonJS modules do not support the `import..from` method, but they do support this method:
+```js
+const getFolderSize = (await import("get-folder-size")).default;
+```
+Note that this import only works inside an async function.
+
+If you want to use the `require` method, consider just staying on v2. You can make v2 return a promise by importing it this way:
+```js
+const util = require("util");
+const getFolderSize = util.promisify(require("get-folder-size"));
+```
+If none of these methods work for you, [send us a detailed explanation of your issue](https://github.com/alessioalex/get-folder-size/issues), and we will take a look at it.
+
 ### How do I use it?
 
 This is a Node module. If you are not sure what that means, please check out one of the many great tutorials online, like [nodejs.dev](https://nodejs.dev/learn/introduction-to-nodejs).
