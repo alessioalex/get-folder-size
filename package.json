@@ -19,7 +19,7 @@
   },
   "devDependencies": {
     "memfs": "^3.2.2",
-    "tap": "^15.0.4"
+    "tap": "^15.0.6"
   },
   "scripts": {
     "test": "tap --no-coverage"
