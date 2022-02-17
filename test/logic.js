@@ -106,21 +106,21 @@ const badFSCore = Volume.fromJSON(
 ).promisesApi;
 
 const badFS = {
-  lstat: async (itemPath) => {
+  lstat: async (itemPath, options) => {
     if(itemPath.includes('failFile')){
       throw Error('Nah - File');
     }else{
-      return await badFSCore.lstat(itemPath);
+      return await badFSCore.lstat(itemPath, options);
     }
   },
-  readdir: async (itemPath) => {
+  readdir: async (itemPath, options) => {
     if(itemPath.includes('failDir')){
       throw Error('Nah - Directory');
     }else{
-      return await badFSCore.readdir(itemPath);
+      return await badFSCore.readdir(itemPath, options);
     }
   }
-}
+};
 
 tap.test('error handling', async () => {
 

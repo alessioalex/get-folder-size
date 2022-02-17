@@ -56,7 +56,7 @@ async function core (rootItemPath, options = {}, returnType = {}) {
   async function processItem(itemPath) {
     if(options.ignore?.test(itemPath)) return;
 
-    const stats = returnType.strict ? await fs.lstat(itemPath) : await fs.lstat(itemPath).catch(error => errors.push(error));
+    const stats = returnType.strict ? await fs.lstat(itemPath, {bigint: true}) : await fs.lstat(itemPath, {bigint: true}).catch(error => errors.push(error));
     if(typeof stats !== 'object') return;
     fileSizes.set(stats.ino, stats.size);
 
