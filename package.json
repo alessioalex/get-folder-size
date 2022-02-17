@@ -19,8 +19,8 @@
     "gar": "^1.0.4"
   },
   "devDependencies": {
-    "memfs": "^3.2.2",
-    "tap": "^15.0.6"
+    "memfs": "^3.4.1",
+    "tap": "^15.1.6"
   },
   "scripts": {
     "test": "tap --no-coverage"
