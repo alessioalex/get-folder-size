@@ -45,12 +45,12 @@ If no errors were encountered, `errors` will be `null`. If errors were encounter
 
 This method is great if you want to implement custom logic based on the errors that were encountered.
 
-### `getFolderSize.loose(path, [options]): number`
+### `getFolderSize.loose(path, [options]): number | bigint`
 The `loose` method will return the folder size directly and ignore any errors it encounters, which means the returned folder size could be smaller than the real folder size.
 
 This method is great if the precise size isn't too important, for example when used only to display the folder size to the user.
 
-### `getFolderSize.strict(path, [options]): number`
+### `getFolderSize.strict(path, [options]): number | bigint`
 The `strict` method will return the folder size directly, but throw an error if it encounters any read errors.
 
 This method is great if you need a very accurate number. You will have to implement some sort of error handling to use it reliably.
@@ -63,11 +63,14 @@ Any of the three methods can also take an `options` object:
 getFolderSize(
   '/path/to/folder', 
   {
+    bigint: true,
     ignore: /pattern/,
     fs: customFS,
   }
 )
 ```
+
+If the `bigint` option is set to true, the folder size is returned as a BigInt instead of the default Number.
 
 The `ignore` option takes a regex pattern. Any file or folder with a path that matches the pattern will not be counted in the total folder size.
 
