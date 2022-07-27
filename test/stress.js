@@ -22,7 +22,7 @@ const largeFS = Volume.fromJSON(files, '/fixture').promisesApi;
 
 tap.test('folder with many files', async () => {
   
-    tap.equal(await getSize.strict('/fixture', {fs: largeFS}), 100000, 'should return correct size of the folder without throwing an error');
-    tap.end();
+  tap.equal(await getSize.strict('/fixture', {fs: largeFS}), 100000, 'should return correct size of the folder without throwing an error');
+  tap.end();
     
 });

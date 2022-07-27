@@ -16,7 +16,7 @@ import getFolderSize from '../index.js';
  */
 async function callAll(itemPath, options){
 
-  const size = await getFolderSize.strict(itemPath, options)
+  const size = await getFolderSize.strict(itemPath, options);
 
   tap.equal(await getFolderSize.loose(itemPath, options), size, 'loose method should return same size as strict');
 
@@ -156,7 +156,7 @@ tap.test('handling very large filesystems', async () => {
 
     tap.type(await getFolderSize.loose('/fixture', {fs: largeFS}), 'number', 'should return Number');
 
-    tap.rejects(async () => {await getFolderSize.strict('/fixture', {fs: largeFS})}, /The folder size is too large to return as a Number. You can instruct this package to return a BigInt instead./, 'should throw appropriate error');
+    tap.rejects(async () => {await getFolderSize.strict('/fixture', {fs: largeFS});}, /The folder size is too large to return as a Number. You can instruct this package to return a BigInt instead./, 'should throw appropriate error');
 
     const { size, errors } = await getFolderSize('/fixture', {fs: largeFS});
     tap.type(size, 'number', 'should return Number');
@@ -221,7 +221,7 @@ tap.test('error handling', async () => {
 
     tap.equal(await getFolderSize.loose('/doesnotexist', {fs: basicFS}), 0, 'should return size of 0');
 
-    tap.rejects(async () => {await getFolderSize.strict('/doesnotexist', {fs: basicFS})}, /ENOENT: no such file or directory, lstat '\/doesnotexist'/, 'should throw appropriate error');
+    tap.rejects(async () => {await getFolderSize.strict('/doesnotexist', {fs: basicFS});}, /ENOENT: no such file or directory, lstat '\/doesnotexist'/, 'should throw appropriate error');
 
     const { size, errors } = await getFolderSize('/doesnotexist', {fs: basicFS});
     tap.equal(size, 0, 'should return size of 0');
@@ -237,7 +237,7 @@ tap.test('error handling', async () => {
 
     tap.equal(await getFolderSize.loose('/fixture', {fs: badFS}), 600, `should return size of files that didn't fail`);
 
-    tap.rejects(async () => {await getFolderSize.strict('/fixture', {fs: badFS})}, /^Nah - /, 'should return appropriate error');
+    tap.rejects(async () => {await getFolderSize.strict('/fixture', {fs: badFS});}, /^Nah - /, 'should return appropriate error');
 
     const { size, errors } = await getFolderSize('/fixture', {fs: badFS});
     tap.equal(size, 600, `should return size of files that didn't fail`);

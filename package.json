@@ -19,11 +19,15 @@
     "gar": "^1.0.4"
   },
   "devDependencies": {
+    "eslint": "^8.20.0",
     "memfs": "^3.4.6",
     "tap": "^16.3.0"
   },
   "scripts": {
-    "test": "tap --no-coverage"
+    "tap": "tap --no-coverage",
+    "lint": "eslint \"**/*.js\" --fix",
+    "lint:nofix": "eslint \"**/*.js\"",
+    "test": "npm run lint:nofix && npm run tap"
   },
   "keywords": [
     "folder",

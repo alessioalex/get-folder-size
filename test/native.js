@@ -12,9 +12,9 @@ import getSize from '../index.js';
 tap.test('get file sizes', async () => {
 
   const 
-  _8 = await getSize.strict('./test/fixture/8bytes.txt'),
-  _500 = await getSize.strict('./test/fixture/500bytes.txt'),
-  _6000 = await getSize.strict('./test/fixture/6000bytes.txt');
+    _8 = await getSize.strict('./test/fixture/8bytes.txt'),
+    _500 = await getSize.strict('./test/fixture/500bytes.txt'),
+    _6000 = await getSize.strict('./test/fixture/6000bytes.txt');
 
   //The slightly larger allowed size is for file systems that might convert LF to CRLF (Windows)
   tap.ok(_8 === 8 || _8 === 9, 'should return correct size of the file');

@@ -14,7 +14,7 @@ import { join as joinPaths } from 'path';
  * 
  * @returns {Promise<{size: number | bigint, errors: Array<Error> | null}>} - An object containing the size of the folder in bytes and a list of encountered errors.
  */
-export default async function getFolderSize (itemPath, options) { return await core(itemPath, options, {errors: true}) }
+export default async function getFolderSize (itemPath, options) { return await core(itemPath, options, {errors: true}); }
 
 /**
  * Returns the size of the folder. If any errors are encountered while traversing the folder, they are silently ignored.
@@ -92,7 +92,7 @@ async function core (rootItemPath, options = {}, returnType = {}) {
     return {
       size: folderSize,
       errors: errors.length > 0 ? errors : null,
-    }
+    };
   } else {
     return folderSize;
   }
