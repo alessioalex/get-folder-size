@@ -12,17 +12,15 @@ import getSize from '../index.js';
 
 //NOTE: Folder sizes are always 0 in memfs. This is not true in native filesystems.
 
-const files = {};
-for(let index = 100000; index--;){
-  files[`./${index}`] = '#';
-}
-
-const largeFS = Volume.fromJSON(files, '/fixture').promisesApi;
-
 
 tap.test('folder with many files', async () => {
+
+  const files = {};
+  for(let index = 100000; index--;){
+    files[`./${index}`] = '#';
+  }
+  const largeFS = Volume.fromJSON(files, '/fixture').promisesApi;
   
   tap.equal(await getSize.strict('/fixture', {fs: largeFS}), 100000, 'should return correct size of the folder without throwing an error');
-  tap.end();
     
 });

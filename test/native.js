@@ -21,8 +21,6 @@ tap.test('get file sizes', async () => {
   tap.ok(_500 === 500 || _500 === 510, 'should return correct size of the file');
   tap.ok(_6000 === 6000 || _6000 === 6020, 'should return correct size of the file');
 
-  tap.end();
-
 });
 
 tap.test('get folder sizes', async () => {
@@ -36,9 +34,6 @@ tap.test('get folder sizes', async () => {
   //If the folder is not present, this test is skipped. Theoretically speaking, anything that could go wrong in this test should also be covered by other tests.
   const node_modules = await getSize.loose('./node_modules');
   tap.ok(100000 < node_modules, 'should return approximately correct size of the node_modules folder', {skip: !fs.existsSync('./node_modules')});
-  
-
-  tap.end();
 
 });
 

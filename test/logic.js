@@ -51,14 +51,12 @@ tap.test('basic folder', async () => {
     tap.equal(await callAll('/fixture/8bytes.txt', {fs: basicFS}), 8, 'should return the correct file size');
     tap.equal(await callAll('/fixture/500bytes.txt', {fs: basicFS}), 500, 'should return the correct file size');
     tap.equal(await callAll('/fixture/6000bytes.txt', {fs: basicFS}), 6000, 'should return the correct file size');
-    tap.end();
 
   });
 
   tap.test('get folder size', async () => {
 
     tap.equal(await callAll('/fixture', {fs: basicFS}), 6508, 'should return the correct folder size');
-    tap.end();
 
   });
 
@@ -71,7 +69,6 @@ tap.test('basic folder - with bigint', async () => {
     tap.equal(await callAll('/fixture/8bytes.txt', {bigint: true, fs: basicFS}), 8n, 'should return the correct file size');
     tap.equal(await callAll('/fixture/500bytes.txt', {bigint: true, fs: basicFS}), 500n, 'should return the correct file size');
     tap.equal(await callAll('/fixture/6000bytes.txt', {bigint: true, fs: basicFS}), 6000n, 'should return the correct file size');
-    tap.end();
 
   });
 
@@ -79,40 +76,28 @@ tap.test('basic folder - with bigint', async () => {
 
     tap.equal(await callAll('/fixture', {bigint: true, fs: basicFS}), 6508n, 'should return the correct folder size');
 
-    tap.end();
-
   });
 
 });
 
-const nestedFS = Volume.fromJSON(
-  {
-    './8bytes.txt': B.repeat(8),
-    './much/empty/path/500bytes.txt': B.repeat(500),
-    './much/empty/path/nested/6000bytes.txt': B.repeat(6000),
-  },
-  '/fixture',
-).promisesApi;
-
 tap.test('nested folder', async () => {
+
+  const nestedFS = Volume.fromJSON(
+    {
+      './8bytes.txt': B.repeat(8),
+      './much/empty/path/500bytes.txt': B.repeat(500),
+      './much/empty/path/nested/6000bytes.txt': B.repeat(6000),
+    },
+    '/fixture',
+  ).promisesApi;
 
   tap.test('get folder size', async () => {
 
     tap.equal(await callAll('/fixture', {fs: nestedFS}), 6508, 'should return the correct folder size');
-    tap.end();
 
   });
 
 });
-
-const linkedFS = Volume.fromJSON(
-  {
-    './original.txt': B.repeat(50),
-  },
-  '/fixture',
-).promisesApi;
-await linkedFS.link('/fixture/original.txt', '/fixture/link.txt');
-await linkedFS.symlink('/fixture/original.txt', '/fixture/symlink.txt');
 
 /**
  * Links do not fill anything, so they should not count towards the folder size.
@@ -120,37 +105,44 @@ await linkedFS.symlink('/fixture/original.txt', '/fixture/symlink.txt');
  */
 tap.test('is not confused by links', async () => {
 
+  const linkedFS = Volume.fromJSON(
+    {
+      './original.txt': B.repeat(50),
+    },
+    '/fixture',
+  ).promisesApi;
+  await linkedFS.link('/fixture/original.txt', '/fixture/link.txt');
+  await linkedFS.symlink('/fixture/original.txt', '/fixture/symlink.txt');
+
   tap.equal(await callAll('/fixture', {fs: linkedFS}), 50, 'should only count the size of the original file');
-  tap.end();
 
 });
 
 tap.test('ignore option', async () => {
 
   tap.equal(await callAll('/fixture', {ignore: /\d{4}bytes/, fs: basicFS}), 508, 'should not count the size of the 6000 byte file');
-  tap.end();
 
 });
 
-const largeFSCore = Volume.fromJSON(
-  {
-    './very.txt': B.repeat(200),
-    './large.txt': B.repeat(200),
-    './files.txt': B.repeat(200),
-  },
-  '/fixture',
-).promisesApi;
-
-const largeFS = {
-  lstat: async (itemPath, options) => {
-    const result = await largeFSCore.lstat(itemPath, options);
-    result.size = BigInt(Number.MAX_SAFE_INTEGER);
-    return result;
-  },
-  readdir: largeFSCore.readdir,
-};
-
 tap.test('handling very large filesystems', async () => {
+
+  const largeFSCore = Volume.fromJSON(
+    {
+      './very.txt': B.repeat(200),
+      './large.txt': B.repeat(200),
+      './files.txt': B.repeat(200),
+    },
+    '/fixture',
+  ).promisesApi;
+  
+  const largeFS = {
+    lstat: async (itemPath, options) => {
+      const result = await largeFSCore.lstat(itemPath, options);
+      result.size = BigInt(Number.MAX_SAFE_INTEGER);
+      return result;
+    },
+    readdir: largeFSCore.readdir,
+  };
 
   tap.test('returning Number', async () => {
 
@@ -164,8 +156,6 @@ tap.test('handling very large filesystems', async () => {
     tap.equal(errors.length, 1, 'should return one error');
     tap.equal(errors[0].message, 'The folder size is too large to return as a Number. You can instruct this package to return a BigInt instead.', 'should return appropriate error');
 
-    tap.end();
-
   });
 
   tap.test('returning BigInt', async () => {
@@ -178,44 +168,42 @@ tap.test('handling very large filesystems', async () => {
     tap.equal(size, BigInt(Number.MAX_SAFE_INTEGER) * 4n, 'should return size of 4 times max safe Number');
     tap.equal(errors, null, 'should return no errors');
 
-    tap.end();
-
   });
 
 });
 
-const badFSCore = Volume.fromJSON(
-  {
-    './pass/pass.md': B.repeat(200),
-    './pass/pass.txt': B.repeat(200),
-    './pass/failFile.js': B.repeat(200),
-    './pass/failFile.md': B.repeat(200),
-    './pass/pass.js': B.repeat(200),
-    './pass/failDir/pass.txt': B.repeat(200),
-    './failDir/pass.txt': B.repeat(200),
-    './failDir/pass.js': B.repeat(200),
-  },
-  '/fixture',
-).promisesApi;
-
-const badFS = {
-  lstat: async (itemPath, options) => {
-    if(itemPath.includes('failFile')){
-      throw Error('Nah - File');
-    }else{
-      return await badFSCore.lstat(itemPath, options);
-    }
-  },
-  readdir: async (itemPath, options) => {
-    if(itemPath.includes('failDir')){
-      throw Error('Nah - Directory');
-    }else{
-      return await badFSCore.readdir(itemPath, options);
-    }
-  }
-};
-
 tap.test('error handling', async () => {
+
+  const badFSCore = Volume.fromJSON(
+    {
+      './pass/pass.md': B.repeat(200),
+      './pass/pass.txt': B.repeat(200),
+      './pass/failFile.js': B.repeat(200),
+      './pass/failFile.md': B.repeat(200),
+      './pass/pass.js': B.repeat(200),
+      './pass/failDir/pass.txt': B.repeat(200),
+      './failDir/pass.txt': B.repeat(200),
+      './failDir/pass.js': B.repeat(200),
+    },
+    '/fixture',
+  ).promisesApi;
+  
+  const badFS = {
+    lstat: async (itemPath, options) => {
+      if(itemPath.includes('failFile')){
+        throw Error('Nah - File');
+      }else{
+        return await badFSCore.lstat(itemPath, options);
+      }
+    },
+    readdir: async (itemPath, options) => {
+      if(itemPath.includes('failDir')){
+        throw Error('Nah - Directory');
+      }else{
+        return await badFSCore.readdir(itemPath, options);
+      }
+    }
+  };
 
   tap.test('missing folder', async () => {
 
@@ -228,8 +216,6 @@ tap.test('error handling', async () => {
     tap.type(errors, Array, 'should return Array of errors');
     tap.equal(errors.length, 1, 'should return one error');
     tap.equal(errors[0].message, `ENOENT: no such file or directory, lstat '/doesnotexist'`, 'should return appropriate error');
-
-    tap.end();
 
   });
 
@@ -259,8 +245,6 @@ tap.test('error handling', async () => {
     }
     tap.equal(dirErrors, 2, 'should return two directory read errors');
     tap.equal(fileErrors, 2, 'should return two file read errors');
-
-    tap.end();
 
   });
 
