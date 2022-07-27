@@ -2,7 +2,7 @@
 
 Get the size of a folder by iterating through its sub-files and -folders.
 
-| :warning: | Version 3 of this package completely redesigns the API to use ES6 promises and bumps minimum node support to version 14. If you need to use the old callback syntax, or if you need to support an older version of node, keep your dependency pinned to version ^2 ([v2 API reference](https://github.com/alessioalex/get-folder-size/tree/v2.0.1)). |
+| :warning: | Version 3+ of this package is pure ESM and uses a new promise-based API. If you need to use CommonJS or the old callback syntax, keep your dependency pinned to version ^2 ([v2 API reference](https://github.com/alessioalex/get-folder-size/tree/v2.0.1)). |
 |-----------|----------------------------------------------------------------------------------------|
 
 ## Basic usage
