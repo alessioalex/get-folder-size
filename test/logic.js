@@ -78,6 +78,27 @@ tap.test('basic folder - with bigint', async () => {
   tap.test('get folder size', async () => {
 
     tap.equal(await callAll('/fixture', {bigint: true, fs: basicFS}), 6508n, 'should return the correct folder size');
+
+    tap.end();
+
+  });
+
+});
+
+const nestedFS = Volume.fromJSON(
+  {
+    './8bytes.txt': B.repeat(8),
+    './much/empty/path/500bytes.txt': B.repeat(500),
+    './much/empty/path/nested/6000bytes.txt': B.repeat(6000),
+  },
+  '/fixture',
+).promisesApi;
+
+tap.test('nested folder', async () => {
+
+  tap.test('get folder size', async () => {
+
+    tap.equal(await callAll('/fixture', {fs: nestedFS}), 6508, 'should return the correct folder size');
     tap.end();
 
   });
