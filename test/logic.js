@@ -64,6 +64,27 @@ tap.test('basic folder', async () => {
 
 });
 
+tap.test('basic folder - with bigint', async () => {
+
+  tap.test('get file sizes', async () => {
+
+    tap.equal(await callAll('/fixture/8bytes.txt', {bigint: true, fs: basicFS}), 8n, 'should return the correct file size');
+    tap.equal(await callAll('/fixture/500bytes.txt', {bigint: true, fs: basicFS}), 500n, 'should return the correct file size');
+    tap.equal(await callAll('/fixture/6000bytes.txt', {bigint: true, fs: basicFS}), 6000n, 'should return the correct file size');
+    tap.end();
+
+  });
+
+  tap.test('get folder size', async () => {
+
+    tap.equal(await callAll('/fixture', {bigint: true, fs: basicFS}), 6508n, 'should return the correct folder size');
+
+    tap.end();
+
+  });
+
+});
+
 const nestedFS = Volume.fromJSON(
   {
     './8bytes.txt': B.repeat(8),
@@ -111,6 +132,58 @@ tap.test('ignore option', async () => {
 
 });
 
+const largeFSCore = Volume.fromJSON(
+  {
+    './very.txt': B.repeat(200),
+    './large.txt': B.repeat(200),
+    './files.txt': B.repeat(200),
+  },
+  '/fixture',
+).promisesApi;
+
+const largeFS = {
+  lstat: async (itemPath, options) => {
+    const result = await largeFSCore.lstat(itemPath, options);
+    result.size = BigInt(Number.MAX_SAFE_INTEGER);
+    return result;
+  },
+  readdir: largeFSCore.readdir,
+};
+
+tap.test('handling very large filesystems', async () => {
+
+  tap.test('returning Number', async () => {
+
+    tap.type(await getFolderSize.loose('/fixture', {fs: largeFS}), 'number', 'should return Number');
+
+    tap.rejects(async () => {await getFolderSize.strict('/fixture', {fs: largeFS})}, /The folder size is too large to return as a Number. You can instruct this package to return a BigInt instead./, 'should throw appropriate error');
+
+    const { size, errors } = await getFolderSize('/fixture', {fs: largeFS});
+    tap.type(size, 'number', 'should return Number');
+    tap.type(errors, Array, 'should return Array of errors');
+    tap.equal(errors.length, 1, 'should return one error');
+    tap.equal(errors[0].message, 'The folder size is too large to return as a Number. You can instruct this package to return a BigInt instead.', 'should return appropriate error');
+
+    tap.end();
+
+  });
+
+  tap.test('returning BigInt', async () => {
+
+    tap.equal(await getFolderSize.loose('/fixture', {bigint: true, fs: largeFS}), BigInt(Number.MAX_SAFE_INTEGER) * 4n, 'should return size of 4 times max safe Number');
+
+    tap.equal(await getFolderSize.strict('/fixture', {bigint: true, fs: largeFS}), BigInt(Number.MAX_SAFE_INTEGER) * 4n, 'should return size of 4 times max safe Number');
+
+    const { size, errors } = await getFolderSize('/fixture', {bigint: true, fs: largeFS});
+    tap.equal(size, BigInt(Number.MAX_SAFE_INTEGER) * 4n, 'should return size of 4 times max safe Number');
+    tap.equal(errors, null, 'should return no errors');
+
+    tap.end();
+
+  });
+
+});
+
 const badFSCore = Volume.fromJSON(
   {
     './pass/pass.md': B.repeat(200),
@@ -126,21 +199,21 @@ const badFSCore = Volume.fromJSON(
 ).promisesApi;
 
 const badFS = {
-  lstat: async (itemPath) => {
+  lstat: async (itemPath, options) => {
     if(itemPath.includes('failFile')){
       throw Error('Nah - File');
     }else{
-      return await badFSCore.lstat(itemPath);
+      return await badFSCore.lstat(itemPath, options);
     }
   },
-  readdir: async (itemPath) => {
+  readdir: async (itemPath, options) => {
     if(itemPath.includes('failDir')){
       throw Error('Nah - Directory');
     }else{
-      return await badFSCore.readdir(itemPath);
+      return await badFSCore.readdir(itemPath, options);
     }
   }
-}
+};
 
 tap.test('error handling', async () => {
 
