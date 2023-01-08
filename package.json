@@ -19,9 +19,9 @@
     "gar": "^1.0.4"
   },
   "devDependencies": {
-    "eslint": "^8.20.0",
-    "memfs": "^3.4.6",
-    "tap": "^16.3.0"
+    "eslint": "^8.31.0",
+    "memfs": "^3.4.13",
+    "tap": "^16.3.2"
   },
   "scripts": {
     "tap": "tap --no-coverage",
