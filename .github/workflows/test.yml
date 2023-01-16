@@ -44,7 +44,8 @@ jobs:
           cache: npm
 
       - name: Install dependencies
-        run: npm install-clean
+        #TODO: change this from "install" to "install-clean" when node 14 support is dropped.
+        run: npm install
 
       - name: Test code
         run: npm test
