@@ -1,6 +1,15 @@
 name: Test
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  schedule:
+   - cron: "7 4 19 * *"
+
+permissions:
+  contents: read
 
 jobs:
 
@@ -9,12 +18,16 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node-version: [18.x]
+        # These version names ensure that new Node versions are automatically tested,
+        # but also ensures that the oldest supported version is changed on purpose.
+        node-version: [lts/*]
         os: [ubuntu-latest, windows-latest, macOS-latest]
         include:
-          - node-version: 14.13.0
+          - node-version: latest
             os: ubuntu-latest
-          - node-version: 16.x
+          - node-version: lts/-1
+            os: ubuntu-latest
+          - node-version: 14.13.0
             os: ubuntu-latest
 
     runs-on: ${{ matrix.os }}
@@ -22,21 +35,16 @@ jobs:
     steps:
 
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up Node ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-
-      - name: Use npm cache
-        uses: actions/cache@v2
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node${{ matrix.node-version }}-${{ hashFiles('**/package-lock.json') }}
+          cache: npm
 
       - name: Install dependencies
-        run: npm install
+        run: npm install-clean
 
       - name: Test code
         run: npm test
