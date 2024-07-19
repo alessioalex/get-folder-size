@@ -19,15 +19,23 @@
     "gar": "^1.0.4"
   },
   "devDependencies": {
-    "eslint": "^8.36.0",
-    "memfs": "^3.4.13",
-    "tap": "^16.3.4"
+    "@eslint/js": "^9.7.0",
+    "@types/eslint__js": "^8.42.3",
+    "eslint": "^9.7.0",
+    "globals": "^15.8.0",
+    "memfs": "^4.9.3",
+    "prettier": "^3.3.3",
+    "tap": "^21.0.0",
+    "typescript": "^5.5.3",
+    "typescript-eslint": "^8.0.0-alpha.46"
   },
   "scripts": {
-    "tap": "tap --no-coverage",
-    "lint": "eslint \"**/*.js\" --fix",
-    "lint:nofix": "eslint \"**/*.js\"",
-    "test": "npm run lint:nofix && npm run tap"
+    "tap": "tap",
+    "lint": "eslint \"**/*.{ts,js}\" --fix",
+    "lint:nofix": "eslint \"**/*.{ts,js}\"",
+    "format": "prettier --write .",
+    "format:nofix": "prettier --check .",
+    "test": "npm run format:nofix && npm run lint:nofix && npm run tap"
   },
   "keywords": [
     "folder",
