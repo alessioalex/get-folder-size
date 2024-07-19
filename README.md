@@ -2,9 +2,6 @@
 
 Get the size of a folder by iterating through its sub-files and -folders.
 
-| :warning: | Version 3+ of this package is pure ESM and uses a new promise-based API. If you need to use CommonJS or the old callback syntax, keep your dependency pinned to version ^2 ([v2 API reference](https://github.com/alessioalex/get-folder-size/tree/v2.0.1)). |
-|-----------|----------------------------------------------------------------------------------------|
-
 ## Basic usage
 
 If you don't care about the details and just want a quick implementation, you can use:
