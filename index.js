@@ -1,4 +1,4 @@
-import { join as joinPaths } from "path";
+import { join as joinPaths } from "node:path";
 
 export default async function getFolderSize(itemPath, options) {
 	return await core(itemPath, options, { errors: true });

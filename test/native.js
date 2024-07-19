@@ -1,4 +1,4 @@
-import fs from "fs";
+import fs from "node:fs";
 import tap from "tap";
 import getSize from "../index.js";
 

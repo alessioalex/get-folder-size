@@ -2,7 +2,7 @@
 
 import getFolderSize from "../index.js";
 import gar from "gar";
-import path from "path";
+import path from "node:path";
 
 const argv = gar(process.argv.slice(2));
 
