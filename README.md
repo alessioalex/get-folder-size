@@ -7,15 +7,15 @@ Get the size of a folder by iterating through its sub-files and -folders.
 If you don't care about the details and just want a quick implementation, you can use:
 
 ```js
-getFolderSize.loose('/path/to/folder');
+getFolderSize.loose("/path/to/folder");
 ```
 
 Example:
 
 ```js
-import getFolderSize from 'get-folder-size';
+import getFolderSize from "get-folder-size";
 
-const myFolder = '/path/to/my/folder';
+const myFolder = "/path/to/my/folder";
 
 const size = await getFolderSize.loose(myFolder);
 console.log(`The folder is ${size} bytes large`);
@@ -27,6 +27,7 @@ console.log(`That is the same as ${(size / 1000 / 1000).toFixed(2)} MB`);
 When reading the size of a folder, read errors can randomly occur for a number of reasons, especially if a different process is altering files in the same folder at the same time. There are three different ways to call this package, depending on how you want to handle those errors:
 
 ### `getFolderSize(path, [options]): object`
+
 The default method will return an object with the size of the folder and a list of encountered errors:
 
 ```js
@@ -43,11 +44,13 @@ If no errors were encountered, `errors` will be `null`. If errors were encounter
 This method is great if you want to implement custom logic based on the errors that were encountered.
 
 ### `getFolderSize.loose(path, [options]): number | bigint`
+
 The `loose` method will return the folder size directly and ignore any errors it encounters, which means the returned folder size could be smaller than the real folder size.
 
 This method is great if the precise size isn't too important, for example when used only to display the folder size to the user.
 
 ### `getFolderSize.strict(path, [options]): number | bigint`
+
 The `strict` method will return the folder size directly, but throw an error if it encounters any read errors.
 
 This method is great if you need a very accurate number. You will have to implement some sort of error handling to use it reliably.
@@ -57,14 +60,11 @@ This method is great if you need a very accurate number. You will have to implem
 Any of the three methods can also take an `options` object:
 
 ```js
-getFolderSize(
-  '/path/to/folder', 
-  {
-    bigint: true,
-    ignore: /pattern/,
-    fs: customFS,
-  }
-)
+getFolderSize("/path/to/folder", {
+  bigint: true,
+  ignore: /pattern/,
+  fs: customFS,
+});
 ```
 
 If the `bigint` option is set to true, the folder size is returned as a BigInt instead of the default Number.
@@ -80,6 +80,7 @@ You can run this module from your command line:
 ```bash
 get-folder-size --folder="/my/folder" --ignore="node_modules"
 ```
+
 The optional `ignore` statement takes a regex pattern.
 
 ## FAQ
@@ -91,14 +92,14 @@ If a file is passed to `get-folder-size`, it will simply return the size of the 
 Example:
 
 ```js
-import getItemSize from 'get-folder-size';
+import getItemSize from "get-folder-size";
 
-for(const path of [
-  '/path/to/small/file.txt',
-  '/path/to/small/folder/',
-  '/path/to/large/file.js',
-  '/path/to/large/folder/',
-]){
+for (const path of [
+  "/path/to/small/file.txt",
+  "/path/to/small/folder/",
+  "/path/to/large/file.js",
+  "/path/to/large/folder/",
+]) {
   console.log(await getItemSize.strict(path));
 }
 
@@ -107,8 +108,8 @@ for(const path of [
 // 402
 // 348614
 // 674362319
-
 ```
+
 ### Does it return actual size or size on disk?
 
 This module calculates the actual folder size, and not the size on disk. [Read about the difference here.](https://web.archive.org/web/20140712235443/https://stackoverflow.com/questions/15470787/please-help-me-understand-size-vs-size-on-disk)
@@ -116,16 +117,20 @@ This module calculates the actual folder size, and not the size on disk. [Read a
 ### How do I import it from a CommonJS module?
 
 CommonJS modules do not support the `import..from` method, but they do support this method:
+
 ```js
 const getFolderSize = (await import("get-folder-size")).default;
 ```
+
 Note that this import only works inside an async function.
 
 If you want to use the `require` method, consider just staying on v2. You can make v2 return a promise by importing it this way:
+
 ```js
 const util = require("util");
 const getFolderSize = util.promisify(require("get-folder-size"));
 ```
+
 If none of these methods work for you, [send us a detailed explanation of your issue](https://github.com/alessioalex/get-folder-size/issues), and we will take a look at it.
 
 ### How do I use it?

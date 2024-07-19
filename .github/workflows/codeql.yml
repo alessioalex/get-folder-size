@@ -14,9 +14,7 @@ permissions:
   security-events: write
 
 jobs:
-
   codeql:
-
     strategy:
       fail-fast: false
       matrix:
