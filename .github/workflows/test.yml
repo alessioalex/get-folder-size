@@ -27,7 +27,7 @@ jobs:
             os: ubuntu-latest
           - node-version: lts/-1
             os: ubuntu-latest
-          - node-version: 14.13.0
+          - node-version: 18.11.0
             os: ubuntu-latest
 
     runs-on: ${{ matrix.os }}
@@ -44,8 +44,7 @@ jobs:
           cache: npm
 
       - name: Install dependencies
-        #TODO: change this from "install" to "install-clean" when node 14 support is dropped.
-        run: npm install
+        run: npm install-clean
 
       - name: Test code
         run: npm test

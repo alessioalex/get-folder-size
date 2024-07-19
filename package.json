@@ -13,7 +13,7 @@
     "bin/get-folder-size.js"
   ],
   "engines": {
-    "node": ">=14.13.0"
+    "node": ">=18.11.0"
   },
   "dependencies": {
     "gar": "^1.0.4"
