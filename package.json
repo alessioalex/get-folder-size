@@ -3,13 +3,18 @@
   "version": "4.0.0",
   "description": "Get the size of a folder by iterating through its sub-files and -folders.",
   "type": "module",
-  "main": "./index.js",
-  "exports": "./index.js",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./index.js"
+    }
+  },
   "bin": {
     "get-folder-size": "./bin/get-folder-size.js"
   },
   "files": [
     "index.js",
+    "index.d.ts",
     "bin/get-folder-size.js"
   ],
   "engines": {
