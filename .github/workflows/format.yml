@@ -30,4 +30,4 @@ jobs:
         run: npm install-clean
 
       - name: Check formatting
-        run: npm format:nofix
+        run: npm run format:nofix
