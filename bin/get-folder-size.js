@@ -1,22 +1,35 @@
 #!/usr/bin/env node
 
 import getFolderSize from "../index.js";
-import gar from "gar";
-import path from "node:path";
+import { parseArgs } from "node:util";
+import { resolve } from "node:path";
 
-const argv = gar(process.argv.slice(2));
+const args = parseArgs({
+	args: process.argv.slice(2),
+	options: {
+		folder: {
+			short: "f",
+			type: "string",
+		},
+		ignore: {
+			short: "i",
+			type: "string",
+		},
+	},
+	allowPositionals: true,
+});
 
 // --folder or -f or last argument passed
-const folder = argv.folder || argv.f || argv._[argv._.length - 1];
+const folder = args.values.folder || args.positionals.at(-1);
 
 if (!folder) {
 	console.error("missing folder argument");
 	console.error("\n  Usage:\n");
-	console.error("get-folder-size --folder=/home/alex/www");
+	console.error(`get-folder-size --folder "/home/alex/www"`);
 	process.exit(1);
 }
 
-const ignore = argv.ignore || argv.i ? new RegExp(argv.ignore || argv.i) : null;
+const ignore = args.values.ignore ? new RegExp(args.values.ignore) : undefined;
 
-const size = await getFolderSize.strict(path.resolve(folder), { ignore });
+const size = await getFolderSize.strict(resolve(folder), { ignore });
 console.log((size / 1000 / 1000).toFixed(2) + " MB");

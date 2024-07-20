@@ -78,7 +78,7 @@ The `fs` option allows you to pass a different filesystem handler, such as [memf
 You can run this module from your command line:
 
 ```bash
-get-folder-size --folder="/my/folder" --ignore="node_modules"
+get-folder-size --folder "/my/folder" --ignore "node_modules"
 ```
 
 The optional `ignore` statement takes a regex pattern.
