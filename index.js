@@ -11,7 +11,7 @@ getFolderSize.strict = async (itemPath, options) =>
 	await core(itemPath, options, { strict: true });
 
 async function core(rootItemPath, options = {}, returnType = {}) {
-	const fs = options.fs || (await import("fs/promises"));
+	const fs = options.fs || (await import("node:fs/promises"));
 
 	const fileSizes = new Map();
 	const errors = [];
