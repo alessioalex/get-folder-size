@@ -55,11 +55,12 @@ async function core(rootItemPath, options = {}, returnType = {}) {
 			);
 			if (returnType.strict) {
 				throw error;
-			} else {
-				errors.push(error);
 			}
+			errors.push(error);
+			folderSize = Number.MAX_SAFE_INTEGER;
+		} else {
+			folderSize = Number(folderSize);
 		}
-		folderSize = Number(folderSize);
 	}
 
 	if (returnType.errors) {
