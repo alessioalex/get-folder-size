@@ -1,6 +1,6 @@
 {
   "name": "get-folder-size",
-  "version": "4.0.0",
+  "version": "5.0.0",
   "description": "Get the size of a folder by iterating through its sub-files and -folders.",
   "type": "module",
   "exports": {
