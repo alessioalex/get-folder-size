@@ -175,10 +175,10 @@ tap.test("handling very large filesystems", async () => {
 	};
 
 	tap.test("returning Number", async () => {
-		tap.type(
+		tap.equal(
 			await getFolderSize.loose("/fixture", { fs: largeFS }),
-			"number",
-			"should return Number",
+			Number.MAX_SAFE_INTEGER,
+			"should return the largest safe number",
 		);
 
 		tap.rejects(
@@ -192,7 +192,11 @@ tap.test("handling very large filesystems", async () => {
 		const { size, errors } = await getFolderSize("/fixture", {
 			fs: largeFS,
 		});
-		tap.type(size, "number", "should return Number");
+		tap.equal(
+			size,
+			Number.MAX_SAFE_INTEGER,
+			"should return the largest safe number",
+		);
 		tap.type(errors, Array, "should return Array of errors");
 		tap.equal(errors.length, 1, "should return one error");
 		tap.equal(
