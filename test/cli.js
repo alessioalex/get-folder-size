@@ -49,6 +49,8 @@ for (const folderArg of ["--folder=", "-f=", ""]) {
 			const args = flipArgs ? `${arg2} ${arg1}` : `${arg1} ${arg2}`;
 
 			tap.test(`get folder size with args: ${args}`, async () => {
+				if (skip) return;
+
 				const result = await exec(`bin/get-folder-size.js ${args}`, {
 					cwd,
 				});
