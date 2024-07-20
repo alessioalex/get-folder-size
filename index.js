@@ -1,4 +1,4 @@
-import { join as joinPaths } from "node:path";
+import { join } from "node:path";
 
 export default async function getFolderSize(itemPath, options) {
 	return await core(itemPath, options, { errors: true });
@@ -42,7 +42,7 @@ async function core(rootItemPath, options = {}, returnType = {}) {
 			if (typeof directoryItems !== "object") return;
 			await Promise.all(
 				directoryItems.map((directoryItem) =>
-					processItem(joinPaths(itemPath, directoryItem)),
+					processItem(join(itemPath, directoryItem)),
 				),
 			);
 		}
