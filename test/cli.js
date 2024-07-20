@@ -20,7 +20,7 @@ const dirname = pathDirname(fileURLToPath(import.meta.url));
 /**
  * Skip the test on operating systems with non-standard path separators (Windows).
  */
-const skip = sep === "/";
+const skip = sep !== "/";
 
 const cwd = joinPaths(dirname, "..");
 const sizeOfFixtureFolder = "0.01 MB";
@@ -29,6 +29,8 @@ for (const folderArg of ["--folder=", "-f=", ""]) {
 	const args = `${folderArg}test/fixture`;
 
 	tap.test(`get folder size with args: ${args}`, async () => {
+		if (skip) return;
+
 		const result = await exec(`bin/get-folder-size.js ${args}`, {
 			cwd,
 		});
@@ -62,6 +64,7 @@ for (const folderArg of ["--folder=", "-f=", ""]) {
 }
 
 tap.test("get folder size with missing args", async () => {
+	if (skip) return;
 	tap.rejects(
 		async () => {
 			await exec("bin/get-folder-size.js", { cwd });
