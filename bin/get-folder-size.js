@@ -16,7 +16,7 @@ if (!folder) {
 	process.exit(1);
 }
 
-const ignore = argv.ignore ? new RegExp(argv.ignore) : null;
+const ignore = argv.ignore || argv.i ? new RegExp(argv.ignore || argv.i) : null;
 
 const size = await getFolderSize.strict(path.resolve(folder), { ignore });
 console.log((size / 1000 / 1000).toFixed(2) + " MB");
