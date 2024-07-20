@@ -13,7 +13,8 @@ getFolderSize.strict = async (itemPath, options) =>
 async function core(rootItemPath, options = {}, returnType = {}) {
 	const fs = options.fs || (await import("node:fs/promises"));
 
-	const fileSizes = new Map();
+	let folderSize = 0n;
+	const foundInos = new Set();
 	const errors = [];
 
 	await processItem(rootItemPath);
@@ -27,7 +28,10 @@ async function core(rootItemPath, options = {}, returnType = {}) {
 					.lstat(itemPath, { bigint: true })
 					.catch((error) => errors.push(error));
 		if (typeof stats !== "object") return;
-		fileSizes.set(stats.ino, stats.size);
+		if (!foundInos.has(stats.ino)) {
+			foundInos.add(stats.ino);
+			folderSize += stats.size;
+		}
 
 		if (stats.isDirectory()) {
 			const directoryItems = returnType.strict
@@ -43,11 +47,6 @@ async function core(rootItemPath, options = {}, returnType = {}) {
 			);
 		}
 	}
-
-	let folderSize = Array.from(fileSizes.values()).reduce(
-		(total, fileSize) => total + fileSize,
-		0n,
-	);
 
 	if (!options.bigint) {
 		if (folderSize > BigInt(Number.MAX_SAFE_INTEGER)) {
