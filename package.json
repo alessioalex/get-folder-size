@@ -21,15 +21,15 @@
     "node": ">=18.11.0"
   },
   "devDependencies": {
-    "@eslint/js": "^9.7.0",
+    "@eslint/js": "^9.14.0",
     "@types/eslint__js": "^8.42.3",
-    "eslint": "^9.7.0",
-    "globals": "^15.8.0",
-    "memfs": "^4.9.3",
+    "eslint": "^9.14.0",
+    "globals": "^15.12.0",
+    "memfs": "^4.14.0",
     "prettier": "^3.3.3",
-    "tap": "^21.0.0",
-    "typescript": "^5.5.3",
-    "typescript-eslint": "^8.0.0-alpha.46"
+    "tap": "^21.0.1",
+    "typescript": "^5.6.3",
+    "typescript-eslint": "^8.14.0"
   },
   "scripts": {
     "tap": "tap",
