@@ -28,7 +28,7 @@ async function core(rootItemPath, options = {}, returnType = {}) {
 					.lstat(itemPath, { bigint: true })
 					.catch((error) => errors.push(error));
 		if (typeof stats !== "object") return;
-		if (!foundInos.has(stats.ino)) {
+		if (!foundInos.has(stats.ino) && typeof stats.size === "bigint") {
 			foundInos.add(stats.ino);
 			folderSize += stats.size;
 		}
